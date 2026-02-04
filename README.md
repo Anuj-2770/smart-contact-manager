@@ -32,3 +32,18 @@ CRUD operations, image upload, and MySQL database integration.
 1. Clone the repository  
    ```bash
    git clone https://github.com/Anuj-2770/smart-contact-manager.git
+
+   ## 📸 Screenshots
+
+### Login Page
+![Login](screenshots/login.png)
+
+### Signup Page
+![Signup](screenshots/signup.png)
+
+### User Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Add Contact
+![Add Contact](screenshots/add-contact.png)
+
