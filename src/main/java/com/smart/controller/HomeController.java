@@ -14,13 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.smart.dao.UserRepository;
 //import com.smart.entities.Contact;
 //import com.smart.entities.User;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.smart.entities.User;
 import com.smart.helper.Message;
-
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller

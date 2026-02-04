@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Smart Contact Manager
 
 A Spring Boot based backend application to manage user contacts with authentication,
@@ -31,23 +30,24 @@ CRUD operations, image upload, and MySQL database integration.
 
 ## ⚙️ How to Run the Project
 1. Clone the repository  
-   ```bash
-   git clone https://github.com/Anuj-2770/smart-contact-manager.git
+ 
+git clone https://github.com/Anuj-2770/smart-contact-manager.git
 
-   ## 📸 Screenshots
+## 📸 Screenshots
 
-### Login Page
-![Login](screenshots/login.png)
+### Login Page  
+![Login Page](screenshots/login.png)  
+🔗 [View Image](screenshots/login.png)
 
-### Signup Page
-![Signup](screenshots/signup.png)
+### Home Page  
+![Home Page](screenshots/home.png)  
+🔗 [View Image](screenshots/home.png)
 
-### User Dashboard
-![Dashboard](screenshots/dashboard.png)
+### User Dashboard  
+![User Dashboard](screenshots/userdashboard.png)  
+🔗 [View Image](screenshots/userdashboard.png)
 
-### Add Contact
-![Add Contact](screenshots/add-contact.png)
+### Add Contact  
+![Add Contact](screenshots/addcontact.png)  
+🔗 [View Image](screenshots/addcontact.png)
 
-=======
-"# Smart Contact Manager" 
->>>>>>> 28246c4 (Add README and screenshots)

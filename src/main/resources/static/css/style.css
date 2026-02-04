@@ -20,7 +20,7 @@ body{
 /* side bar style*/
 @media only screen and (max-width: 600px){
   .sidebar{
-  display: none;
+  display: fixed;
 	width: 80%;
 	background: white;
 	height: 100vh;
@@ -73,4 +73,11 @@ body{
 	right:35px;
 	font-size:36px;
 	cursor:pointer;
+}
+.my_profile_picture{
+	width: 30px;
+	height: 30px;
+	object-fit:cover;
+	border-radius:50%;
+	
 }

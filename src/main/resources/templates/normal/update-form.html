@@ -1,24 +1,27 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" 
- th:replace="~{normal/base::layout(~{::section})}">
+th:replace="~{normal/base::layout(~{::section})}">
 <head>
 	<meta charset="UTF-8" />
-	<title> add contact page</title>
+	<title> update  page</title>
 </head>
+<body>
 	<section>
+	
 	<div  class="card mr-3">
 	<div  class="card-body">
-	<h1   class="text-center"> ADD CONTACT PAGE</h1>
+	<h1   class="text-center"> UPDATE YOUR CONTACT DETAILS</h1>
 	<div  class="container-fluid mt-1">
 	<div  class="row"> 
 	<div  class="col-md-10 offset-md-1">
 	
 	<form action="#" 
-	th:action = "@{/user/process-contact}"
+	th:action = "@{/user/process-update}"
 	th:object="${contact}"
 	enctype="multipart/form-data"
 	method="POST"
 	class="mt-2">
+	 <input type="hidden" th:field="*{cId}">
 	<!--First Name  -->
 	<div class="input-group">
 	<div class="input-group-prepend">
@@ -26,7 +29,7 @@
 	<i class="fa fa-plus"></i>
 	</div>
 	</div>
-	<input type="text" id="firstName" name="name" placeholder="Enter Name Here" class="form-control"/>
+	<input th:value="${contact.name}" type="text" id="firstName" name="name" placeholder="Enter Name Here" class="form-control"/>
 	</div>
 	
 	<!--Nick Name  -->
@@ -36,7 +39,7 @@
 	<i class="fas fa-user-alt"></i>
 	</div>
 	</div>
-	<input type="text" id="nickName" name="nickName" placeholder="Enter Nickname Here" class="form-control"/>
+	<input th:value="${contact.nickName}" type="text" id="nickName" name="nickName" placeholder="Enter Nickname Here" class="form-control"/>
 	</div>
 	
 	<!--Phone field  -->
@@ -46,7 +49,7 @@
 	<i class="fa fa-phone"></i>
 	</div>
 	</div>
-	<input type="number" id="phone" name="phone" placeholder="Enter Phone Number Here" class="form-control"/>
+	<input th:value="${contact.phone}" type="number" id="phone" name="phone" placeholder="Enter Phone Number Here" class="form-control"/>
 	</div>
 	
 	<!--email field  -->
@@ -56,7 +59,7 @@
 	@
 	</div>
 	</div>
-	<input type="email" id="email" name="email" placeholder="Enter Valid Email Here" class="form-control"/>
+	<input th:value="${contact.email}" type="email" id="email" name="email" placeholder="Enter Valid Email Here" class="form-control"/>
 	</div>
 	
 	<!--Work Field  -->
@@ -66,19 +69,24 @@
 	<i class="fa fa-briefcase"></i>
 	</div>
 	</div>
-	<input type="text" id="work" name="work" placeholder="Enter Occupation Here" class="form-control"/>
+	<input th:value="${contact.work}" type="text" id="work" name="work" placeholder="Enter Occupation Here" class="form-control"/>
 	</div>
 	
 	<!-- Contact Description -->
 	<textarea id="mytextarea"
           name="discriptions"
           class="form-control"
+          th:text="${contact.discriptions}"
           placeholder="Enter some discriptions here..!!"
           rows="5"></textarea>
 	
 	
 	<!-- Image Field -->
 	<div class="custom-file mt-1">
+	<div class="container text-center">
+	<img style=" width:220px; height:220px;" th:src="@{'/image/' + ${contact.image}}">
+	<p class="text-secondary">please choose a new pic...</p>
+	</div>
 	<input type="file" name="profileImage" id ="image" class="form-control"/>
 	</div>
 	
@@ -93,20 +101,6 @@
 	</div>
 	</div>
 	</div>
-<!-- TinyMCE CDN 
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
-
-<script>
-  tinymce.init({
-    selector: '#mytextarea',
-    height: 300,
-    plugins: 'lists link code',
-    toolbar: 'undo redo | bold italic | bullist numlist | code'
-  });
-</script>
--->
-
-
-
 	</section>
+</body>
 </html>
