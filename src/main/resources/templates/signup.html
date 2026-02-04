@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8" />
+    <title>Register Page</title>
+</head>
+<body>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-2">
+                <div class="my-card mt-2">
+
+                    <!-- ✅ Flash Message Block -->
+                    <div th:if="${message}" 
+                         class="alert" 
+                         th:classappend="' ' + ${message.type}" 
+                         role="alert">
+                        <p class="text-center" th:text="${message.content}"></p>
+                    </div>
+
+                    <div class="container text-center">
+                        <img width="80px" th:src="@{/image/registationimg.png}" alt="Registration"/>
+                    </div>
+                    <h1 class="text-center">Register Here !!</h1>
+
+                    <form th:action="@{/do_register}" method="post" th:object="${user}">
+                        <!-- Name field -->
+                        <div class="form-group">
+                            <label>Your Name :</label>
+                            <input type="text" th:field="*{name}" 
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" 
+                                   placeholder="Enter your name">
+                            <div class="invalid-feedback" th:errors="*{name}"></div>
+                        </div>
+
+                        <!-- Email field -->
+                        <div class="form-group">
+                            <label>Your Email :</label>
+                            <input type="email" th:field="*{email}" 
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" 
+                                   placeholder="Enter your email">
+                            <div class="invalid-feedback" th:errors="*{email}"></div>
+                        </div>
+
+                        <!-- Password field -->
+                        <div class="form-group">
+                            <label>Password :</label>
+                            <input type="password" th:field="*{password}" 
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" 
+                                   placeholder="Enter password">
+                            <div class="invalid-feedback" th:errors="*{password}"></div>
+                        </div>
+
+                        <!-- About field -->
+                        <div class="form-group">
+                            <textarea rows="5" th:field="*{about}" 
+                                      class="form-control"
+                                      th:classappend="${#fields.hasErrors('about')} ? 'is-invalid' : ''"
+                                      placeholder="Write something about yourself"></textarea>
+                            <div class="invalid-feedback" th:errors="*{about}"></div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-group form-check text-center">
+                            <input type="checkbox" th:field="*{agreement}" 
+                                   class="form-check-input"
+                                   th:classappend="${#fields.hasErrors('agreement')} ? 'is-invalid' : ''">
+                            <label class="form-check-label">Accept Terms and Conditions</label>
+                            <div class="invalid-feedback d-block" th:errors="*{agreement}"></div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="container text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="reset" class="btn btn-warning">Reset</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
