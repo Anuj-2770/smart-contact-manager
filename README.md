@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Smart Contact Manager
 
 A Spring Boot based backend application to manage user contacts with authentication,
@@ -47,3 +48,6 @@ CRUD operations, image upload, and MySQL database integration.
 ### Add Contact
 ![Add Contact](screenshots/add-contact.png)
 
+=======
+"# Smart Contact Manager" 
+>>>>>>> 28246c4 (Add README and screenshots)
