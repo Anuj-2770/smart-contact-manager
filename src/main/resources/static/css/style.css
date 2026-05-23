@@ -20,7 +20,7 @@ body{
 /* side bar style*/
 @media only screen and (max-width: 600px){
   .sidebar{
-  display: fixed;
+  
 	width: 80%;
 	background: white;
 	height: 100vh;
@@ -38,12 +38,12 @@ body{
 	height: 100%;
 	position: fixed;
 	padding-top: 45px;
-	left: -250px;      /* hidden */
+	left: 0;      /* visible */
   transition: 0.3s;
   display: block;
 }
-.sidebar.visible {
-  left: 0;           /* visible */
+.sidebar.hidden {
+  left: -250px;           /* hidden */
 }
 
 .sidebar a{
@@ -65,7 +65,11 @@ body{
 }
 .contents{
 	margin-left: 20%;
-	
+	transition: margin-left 0.3s; /* smooth transition */
+}
+/* When sidebar is hidden */
+.contents.full-width {
+    margin-left: 0;
 }
 .sidebar .cross-btn{
 	position: absolute;
@@ -80,4 +84,21 @@ body{
 	object-fit:cover;
 	border-radius:50%;
 	
+}
+/* Search functionally */
+.search-container{
+	position: relative;
+}
+.search-result{
+	position: absolute;
+	background: white;
+	width:100%;
+	display: none;
+	border: 1px solid gray;
+	padding: 10px;
+	 z-index: 1000;
+}
+.active{
+	background:rgba(13,110,253,.5);
+	color:white;
 }

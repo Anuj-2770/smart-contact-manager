@@ -6,26 +6,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
 import com.smart.dao.ContactRepository;
+import com.smart.dao.MyOrderRepository;
 import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
+import com.smart.entities.MyOrder;
 import com.smart.entities.User;
 import com.smart.helper.Message;
 
@@ -39,6 +49,12 @@ public class UserController {
 	
 	@Autowired
 	private ContactRepository contactRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private MyOrderRepository myOrderRepository;
 	
 	@ModelAttribute
 	public void addCommonData(Model model, Principal principal) {
@@ -210,5 +226,125 @@ public class UserController {
 	 
 		model.addAttribute("title", "profile page");
 		return "normal/profile";
+	}
+	// setting handler
+	@GetMapping("/setting")
+	public String settingPage(Model model) {
+		model.addAttribute("title", "settings");
+	    return "normal/setting";	
+	}
+	
+	@PostMapping("/update-profile")
+	public String updateProfile(
+	        @RequestParam("name") String name,
+	        @RequestParam("email") String email,
+	        @RequestParam("about") String about,
+	        Principal principal,
+	        HttpSession session) {
+
+	    try {
+	        String username = principal.getName();
+	        User user = userRepository.getUserByUserName(username);
+
+	        user.setName(name);
+	        user.setEmail(email);
+	        user.setAbout(about);
+
+	        userRepository.save(user);
+
+	        session.setAttribute("message",
+	                new Message("Profile updated successfully !!", "success"));
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        session.setAttribute("message",
+	                new Message("Something went wrong while updating profile !!", "danger"));
+	    }
+
+	    return "redirect:/user/setting";
+	}
+
+	@PostMapping("/change-password")
+	public String changePassword(
+	        @RequestParam("oldPassword") String oldPassword,
+	        @RequestParam("newPassword") String newPassword,
+	        @RequestParam("confirmPassword") String confirmPassword,
+	        Principal principal,
+	        HttpSession session) {
+
+	    try {
+	        String username = principal.getName();
+	        User currentUser = userRepository.getUserByUserName(username);
+
+	        if (!passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+	            session.setAttribute("message",
+	                    new Message("Current password is incorrect !!", "danger"));
+	            return "redirect:/user/setting";
+	        }
+
+	        if (!newPassword.equals(confirmPassword)) {
+	            session.setAttribute("message",
+	                    new Message("New password and confirm password do not match !!", "warning"));
+	            return "redirect:/user/setting";
+	        }
+
+	        if (newPassword.length() < 6) {
+	            session.setAttribute("message",
+	                    new Message("New password must be at least 6 characters !!", "warning"));
+	            return "redirect:/user/setting";
+	        }
+
+	        currentUser.setPassword(passwordEncoder.encode(newPassword));
+	        userRepository.save(currentUser);
+
+	        session.setAttribute("message",
+	                new Message("Password changed successfully !!", "success"));
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        session.setAttribute("message",
+	                new Message("Something went wrong while changing password !!", "danger"));
+	    }
+
+	    return "redirect:/user/setting";
+	}
+	
+	// handle create order for payment gateway
+	@PostMapping("/create_order")
+	@ResponseBody
+	public String createOrder(@RequestBody Map<String , Object> data ,Principal principal) throws Exception {
+		System.out.println(data);
+		int amt = Integer.parseInt(data.get("amount").toString());
+		var client = new RazorpayClient("rzp_test_SgQly9ICP0t15w","dDqRpUJegyzG13kBcswHyKn9");
+		JSONObject ob = new JSONObject();
+		ob.put("amount", amt*100);
+		ob.put("currency", "INR");
+		ob.put("receipt", "txn_345762");
+		//creating order
+		Order order = client.orders.create(ob);
+		System.out.println(order);
+		// if you want to save oreder details in databse
+		MyOrder myOrder = new MyOrder();
+		myOrder.setAmount(order.get("amount")+"");
+		myOrder.setOrderId(order.get("id"));
+		myOrder.setPaymentId(null);
+		myOrder.setReceipt(order.get("receipt"));
+		myOrder.setStatus("created");
+		User userName = this.userRepository.getUserByUserName(principal.getName());
+		myOrder.setUser(userName);
+		this.myOrderRepository.save(myOrder);
+		
+		return order.toString();
+	}
+	//handler the payment update on the server after payment success
+	@PostMapping("/update_order")
+	public ResponseEntity<?> updateOrder(@RequestBody Map<String , Object> data){
+		
+	MyOrder myOrder 	= this.myOrderRepository.findByOrderId(data.get("order_id").toString());
+		myOrder.setPaymentId(data.get("payment_id").toString());
+		myOrder.setStatus(data.get("status").toString());
+		this.myOrderRepository.save(myOrder);
+		System.out.println(data);
+		return ResponseEntity.ok(Map.of("msg","updated"));
 	}
 }
