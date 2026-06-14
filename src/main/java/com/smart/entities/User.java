@@ -2,6 +2,7 @@ package com.smart.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="USER")
+@Table(name="USERS")
 public class User {
 	
 	
